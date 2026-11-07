@@ -2,7 +2,7 @@
 title:   "The AI King — AI 一键安装索引"
 version: "1.9"
 updated: "2026-11-07"
-total:   179
+total:   181
 ---
 
 # 🎯 The AI King — AI 一键安装索引
@@ -643,7 +643,7 @@ CLI 命令为 graphify，PyPI 包名为 graphifyy（双 y）。
 
 ---
 
-### 180 — agent-qa-result-triage（应用测试失败分析）
+### 182 — agent-qa-result-triage（应用测试失败分析）
 
 | 字段 | 值 |
 |------|-----|
@@ -3880,7 +3880,7 @@ AGPL-3.0（sdk/ 与 examples/ 为 MIT）；社区第三方项目，非 DeepSeek 
 
 | 字段 | 值 |
 |------|-----|
-| **来源** | npm @tinyforge（ethanwilkins 发布） |
+| **来源** | phoenixlucky |
 | **分类** | DeepSeek Harness 插件 |
 | **一句话** | 把当前 Session 的每一轮、每条消息和工具调用渲染成统一、可复制的规范化 transcript，便于归档与复盘 |
 
@@ -3934,6 +3934,81 @@ GPL-3.0；社区项目，非 DeepSeek 官方。当前版本 0.3.2。
 
 ---
 
+### 180 — dsh-opencode-patch（OpenCode 接入补丁）
+
+| 字段 | 值 |
+|------|-----|
+| **来源** | npm dsh-opencode-patch（viztor，MIT） |
+| **分类** | DeepSeek Harness 插件 |
+| **一句话** | 让 OpenCode Zen / Go 模型在 DSH 内稳定可用：会话亲和、网关来源头、免费层工具回退、按模型路由四种协议，附实时额度计量 |
+
+**安装指令：**
+
+```
+安装 dsh-opencode-patch（Node 24+）。
+npm：https://www.npmjs.com/package/dsh-opencode-patch
+来源：https://github.com/viztor/dsh-opencode-patch
+安装：
+  cd ~/.dsh/profiles/web
+  npm install dsh-opencode-patch
+再把 dsh-opencode-patch 加入该 profile 的 dsh.profile.bundles（可按需设 patchReload: "live"），
+并在 DSH Credentials 或环境变量里存好 OPENCODE_GO_API_KEY（Go）/ OPENCODE_API_KEY（Zen），
+然后重启 dsh web（客户端 UI 变更刷新浏览器即可）。
+
+安装后：
+- 确定性 ses_<hex><base62> 会话哈希，跨轮次、子代理与分叉保持 KV 提示缓存亲和
+- 网关来源恢复：User-Agent、x-opencode-client、x-opencode-project、父会话谱系
+- 免费层 read + bash 工具 schema 回退（注意：Zen 免费层 403 由网关侧决定，补丁不承诺解除）
+- 目录补全（models.opencode.ai）：显示名、上下文窗口、价格；离线预置 + 后台 SWR 刷新
+- 按模型而非按 provider 路由：OpenAI Chat Completions / Responses / Anthropic / Google 四种协议
+- 输入框停靠栏实时计量：Go 三窗口（5 小时/每周/每月）额度环，或 Zen 按量计费花费
+- Zen 密钥严格隔离，不查询 Go 额度端点
+- 设置卡片九个控件：注入开关、端点 auto/legacy/modern、凭据来源、是否读取 OpenCode 本地密钥等
+已验证 DSH 0.2.1 / 0.2.2 预发布（alpha 与 rc 两条通道）；MIT。
+```
+
+---
+
+### 181 — DSH-to-Figma（Figma 原生画布）
+
+| 字段 | 值 |
+|------|-----|
+| **来源** | Duoasa（⭐ 56） |
+| **分类** | DeepSeek Harness 插件 |
+| **一句话** | 把 Figma 原生画布接进 DSH：用自然语言读写设计、组件与变量、导出素材与截图，本地模式不消耗官方 MCP 额度 |
+
+**安装指令：**
+
+```
+安装 DSH to Figma。
+来源：https://github.com/Duoasa/DSH-to-Figma（⭐ 56）
+推荐：把下面这段发给能执行命令的 DSH，让它按仓库最新 README 自动装：
+  「帮我安装或升级 DSH to Figma：https://github.com/Duoasa/DSH-to-Figma
+   按最新 README：确认当前宿主的 CLI / profile / DSH_HOME → 从最新 Release 取
+   dsh-to-figma-<版本>.tgz 与 SHA256SUMS 并校验 → 用宿主原生 plugin --profile <profile> add
+   安装（local 模式，保留其他插件）→ 检查插件组件与工具 → 调用 figma_setup 给我
+   manifest.json 完整路径 → 我导入后调用 figma_status 确认两端版本与连接」
+手动：从最新 Release 下载 tgz + SHA256SUMS，校验后
+  dsh plugin --profile <profile> add "file:/绝对路径/dsh-to-figma-0.3.5.tgz"
+（macOS 桌面版请用应用内置 CLI：
+ /Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh）
+
+首次连接：Figma 桌面端 Plugins → Development → Import plugin from manifest…，
+导入 figma_setup 返回的 manifest.json（通常 ~/.dsh/figma/companion/manifest.json），
+在目标文件运行 DSH to Figma · Local 并保持窗口打开。
+
+安装后可用：
+- 读懂设计：选中画板、图层结构、文字、尺寸、布局、样式与截图
+- 创作与修改：原生画板/文字/矢量/自动布局；批量改文案、颜色、字号、间距、圆角
+- 设计系统：组件、变体、实例属性、样式、变量、模式与别名
+- 素材与交付：导入图片/SVG，导出 PNG/JPG/SVG/PDF；设计稿转前端代码
+- FigJam / Slides / 原型交互；0.3.5 支持原生关键帧动画、断线重连、能力检测
+默认 local 模式（bridgePort 3055），可切 desktop / remote；不消耗官方 Figma MCP 调用额度。
+已验证 DSH Desktop 0.2.1-rc.5 / 0.2.2-rc.1；MIT。
+```
+
+---
+
 ## 🚀 AI 一键安装（全文复制）
 
 > 将下方内容直接提供给 AI Agent，它会读取每个 Skill 的来源和安装指令自动完成安装：
@@ -3978,7 +4053,7 @@ GPL-3.0；社区项目，非 DeepSeek 官方。当前版本 0.3.2。
 132. Graphify — Graphify-Labs（⭐ 125k），代码/文档/PDF 转可查询知识图谱（本地 AST）
 168. Spec Kit — GitHub 官方（⭐ 143.7k），规格驱动开发（规格→计划→任务→实现→收敛）
 
-180. agent-qa-result-triage — vostride，基于运行摘要、截图和日志分析应用测试失败
+182. agent-qa-result-triage — vostride，基于运行摘要、截图和日志分析应用测试失败
 
 【前端与设计】
 5. Frontend Design — Anthropic 官方，去 AI 感设计
@@ -4147,8 +4222,10 @@ GPL-3.0；社区项目，非 DeepSeek 官方。当前版本 0.3.2。
 175. dsh-pet — PC2005-cloud（⭐ 5.4k），透明动画桌面宠物（100+ 动画/多开/DIY）
 176. dsh-archive-manager — MichengAI（⭐ 283），归档会话管理（搜索/恢复/清理/永久删除）
 177. dsh-Go — ccch1mneyyy（⭐ 8.4k），DSH Android 客户端（本机跑 + 远程遥控）
-178. dsh-session-norms — npm @tinyforge，会话规范化 transcript（全 turn/消息/工具调用可复制）
+178. dsh-session-norms — phoenixlucky，会话规范化 transcript（全 turn/消息/工具调用可复制）
 179. dsh-open-market — npm（polang233），DSH 开放插件市场（搜索/收藏/版本切换/更新）
+180. dsh-opencode-patch — npm（viztor），OpenCode Zen/Go 接入 DSH（会话亲和/协议路由/额度计量）
+181. DSH-to-Figma — Duoasa（⭐ 56），Figma 原生画布接入 DSH（读写设计/组件/变量/导出）
 
 请根据上面每个 Skill 的「安装指令」完成安装，如果存在，则覆盖安装。
 ```
